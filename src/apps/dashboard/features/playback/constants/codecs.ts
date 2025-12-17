@@ -22,13 +22,14 @@ export const CODECS = [
             'qsv',
             'vaapi',
             'rkmpp',
-            'videotoolbox'
+            'videotoolbox',
+            'v4l2m2m'
         ]
     },
     {
         name: 'MPEG1',
         codec: 'mpeg1video',
-        types: [ 'rkmpp' ]
+        types: [ 'rkmpp', 'v4l2m2m' ]
     },
     {
         name: 'MPEG2',
@@ -38,7 +39,8 @@ export const CODECS = [
             'nvenc',
             'qsv',
             'vaapi',
-            'rkmpp'
+            'rkmpp',
+            'v4l2m2m'
         ]
     },
     {
@@ -46,7 +48,8 @@ export const CODECS = [
         codec: 'mpeg4',
         types: [
             'nvenc',
-            'rkmpp'
+            'rkmpp',
+            'v4l2m2m'
         ]
     },
     {
@@ -56,7 +59,8 @@ export const CODECS = [
             'amf',
             'nvenc',
             'qsv',
-            'vaapi'
+            'vaapi',
+            'v4l2m2m'
         ]
     },
     {
@@ -67,7 +71,8 @@ export const CODECS = [
             'qsv',
             'vaapi',
             'rkmpp',
-            'videotoolbox'
+            'videotoolbox',
+            'v4l2m2m'
         ]
     },
     {
@@ -79,7 +84,8 @@ export const CODECS = [
             'qsv',
             'vaapi',
             'rkmpp',
-            'videotoolbox'
+            'videotoolbox',
+            'v4l2m2m'
         ]
     },
     {
@@ -91,7 +97,8 @@ export const CODECS = [
             'qsv',
             'vaapi',
             'rkmpp',
-            'videotoolbox'
+            'videotoolbox',
+            'v4l2m2m'
         ]
     }
 ];
@@ -102,7 +109,8 @@ export const HEVC_VP9_HW_DECODING_TYPES = [
     'nvenc',
     'qsv',
     'vaapi',
-    'rkmpp'
+    'rkmpp',
+    'v4l2m2m'
 ];
 
 /** Hardware decoders which support HEVC RExt */

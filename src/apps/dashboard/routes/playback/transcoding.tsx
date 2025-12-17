@@ -149,7 +149,7 @@ export const Component = () => {
     }, [ config ]);
 
     const hardwareAccelType = config?.HardwareAccelerationType || HardwareAccelerationType.None;
-    const isHwaSelected = [ 'amf', 'nvenc', 'qsv', 'vaapi', 'rkmpp', 'videotoolbox' ].includes(hardwareAccelType);
+    const isHwaSelected = [ 'amf', 'nvenc', 'qsv', 'vaapi', 'rkmpp', 'videotoolbox', 'v4l2m2m' ].includes(hardwareAccelType);
 
     const availableCodecs = useMemo(() => (
         CODECS.filter(codec => codec.types.includes(hardwareAccelType))
@@ -222,6 +222,16 @@ export const Component = () => {
                                     value={config.QsvDevice}
                                     onChange={onConfigChange}
                                     helperText={globalize.translate('LabelQsvDeviceHelp')}
+                                />
+                            )}
+
+                            {hardwareAccelType === 'v4l2m2m' && (
+                                <TextField
+                                    name='V4l2m2mDevice'
+                                    label={globalize.translate('LabelV4l2m2mDevice')}
+                                    value={config.V4l2m2mDevice}
+                                    onChange={onConfigChange}
+                                    helperText={globalize.translate('LabelV4l2m2mDeviceHelp')}
                                 />
                             )}
 

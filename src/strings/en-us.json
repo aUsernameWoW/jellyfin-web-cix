@@ -1019,6 +1019,8 @@
     "LabelUserMaxActiveSessions": "Maximum number of simultaneous user sessions",
     "LabelUsername": "Username",
     "LabelUserRemoteClientBitrateLimitHelp": "Override the default global value set in server settings, see Dashboard > Playback > Streaming.",
+    "LabelV4l2m2mDevice": "V4L2 Video Device",
+    "LabelV4l2m2mDeviceHelp": "The V4L2 video device node used for hardware encoding/decoding (e.g., /dev/video3 or /dev/video-cixdec0).",
     "LabelVaapiDevice": "VA-API Device",
     "LabelVaapiDeviceHelp": "This is the render node that is used for hardware acceleration.",
     "LabelValue": "Value",

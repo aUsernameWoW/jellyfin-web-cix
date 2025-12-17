@@ -688,6 +688,8 @@
     "LabelUserLibraryHelp": "选择一个在设备上显示的用户媒体库。留空则使用默认设置。",
     "LabelUserRemoteClientBitrateLimitHelp": "覆盖服务器设置中设置的默认全局值，请参阅仪表板 > 播放 > 流媒体。",
     "LabelUsername": "用户名",
+    "LabelV4l2m2mDevice": "V4L2 视频设备",
+    "LabelV4l2m2mDeviceHelp": "用于硬件编解码的 V4L2 视频设备节点（例如：/dev/video3 或 /dev/video-cixdec0）。",
     "LabelVaapiDevice": "VA-API 设备",
     "LabelVaapiDeviceHelp": "此渲染节点用来硬件加速。",
     "LabelValue": "数值",
