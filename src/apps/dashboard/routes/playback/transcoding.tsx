@@ -279,6 +279,19 @@ export const Component = () => {
                                             />
                                         )}
 
+                                        {HEVC_VP9_HW_DECODING_TYPES.includes(hardwareAccelType) && (
+                                            <FormControlLabel
+                                                label={'AV1 10bit'}
+                                                control={
+                                                    <Checkbox
+                                                        name={'EnableDecodingColorDepth10Av1'}
+                                                        checked={config.EnableDecodingColorDepth10Av1}
+                                                        onChange={onCheckboxChange}
+                                                    />
+                                                }
+                                            />
+                                        )}
+
                                         {HEVC_REXT_DECODING_TYPES.includes(hardwareAccelType) && (
                                             <FormControlLabel
                                                 label={'HEVC RExt 8/10bit'}
