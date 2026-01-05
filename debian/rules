@@ -1,0 +1,18 @@
+#!/usr/bin/make -f
+
+export DH_VERBOSE = 1
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	npm ci --no-audit
+	npm run build:production
+	# Rename dist to web for proper installation path
+	mv dist web
+
+override_dh_auto_clean:
+	rm -rf node_modules dist web build
+
+override_dh_shlibdeps:
+	# Skip for web assets

@@ -1,0 +1,8 @@
+jellyfin-web-cix (10.12.0-cix1) unstable; urgency=medium
+
+  * Initial release of jellyfin-web-cix with V4L2M2M configuration support
+  * Added V4L2M2M hardware acceleration type to transcoding settings
+  * Added V4L2M2M device path configuration option
+  * Added codec support arrays for V4L2M2M hardware type
+
+ -- Jellyfin CIX Team <noreply@example.com>  Sun, 05 Jan 2026 00:00:00 +0000

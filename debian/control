@@ -1,0 +1,20 @@
+Source: jellyfin-web-cix
+Section: misc
+Priority: optional
+Maintainer: Jellyfin CIX Packaging Team
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.4
+Homepage: https://github.com/radxa-pkg/cix-prebuilt
+
+Package: jellyfin-web-cix
+Architecture: all
+Depends: ${misc:Depends}
+Suggests: jellyfin-server-cix
+Conflicts: jellyfin-web
+Replaces: jellyfin-web
+Provides: jellyfin-web
+Description: Jellyfin Web Interface with CIX V4L2M2M configuration support
+ Web interface for Jellyfin Media Server.
+ .
+ This fork includes UI modifications for configuring V4L2M2M hardware
+ acceleration on CIX SoC devices.

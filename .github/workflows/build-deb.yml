@@ -1,0 +1,106 @@
+name: Build Debian Package
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_suffix:
+        description: 'Version suffix (e.g., cix1, cix2)'
+        required: false
+        default: 'cix1'
+
+env:
+  NODE_VERSION: '20'
+  VERSION: '10.12.0'
+
+jobs:
+  build-deb:
+    name: Build Debian Package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y debhelper devscripts fakeroot
+
+      - name: Update changelog version
+        run: |
+          sed -i "s/10.12.0-cix1/${{ env.VERSION }}-${{ github.event.inputs.version_suffix || 'cix1' }}/" debian/changelog
+
+      - name: Build Debian package
+        run: |
+          dpkg-buildpackage -us -uc -b
+
+      - name: Move artifacts
+        run: |
+          mkdir -p artifacts
+          mv ../jellyfin-web-cix_*.deb artifacts/
+          ls -la artifacts/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: jellyfin-web-cix-deb
+          path: artifacts/*.deb
+
+  release:
+    name: Create Release
+    needs: build-deb
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: jellyfin-web-cix-deb
+          path: artifacts
+
+      - name: Get current date
+        id: date
+        run: echo "date=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ env.VERSION }}-${{ github.event.inputs.version_suffix || 'cix1' }}-${{ steps.date.outputs.date }}
+          name: Jellyfin Web CIX v${{ env.VERSION }}-${{ github.event.inputs.version_suffix || 'cix1' }}
+          body: |
+            ## Jellyfin Web CIX
+
+            This release includes Jellyfin Web Interface with V4L2M2M hardware acceleration configuration support for CIX SoC.
+
+            ### Features
+            - V4L2M2M hardware acceleration type selection in transcoding settings
+            - V4L2M2M device path configuration option
+            - Codec support configuration for V4L2M2M hardware type
+
+            ### Installation
+            ```bash
+            sudo dpkg -i jellyfin-web-cix_*.deb
+            ```
+
+            ### FFmpeg Dependency
+            **Important**: For full hardware acceleration support, you also need:
+            - `jellyfin-server-cix` - Server with V4L2M2M support
+            - `ffmpeg-cix` - FFmpeg with V4L2M2M support
+
+            The ffmpeg-cix Debian deb package can be found at:
+            https://github.com/radxa-pkg/cix-prebuilt/releases
+
+            ### Related Packages
+            - `jellyfin-server-cix` - Server with V4L2M2M support
+            - `ffmpeg-cix` - FFmpeg with V4L2M2M support
+          files: artifacts/*.deb
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
