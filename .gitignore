@@ -21,3 +21,11 @@ config.json
 
 # environment related
 .envrc
+
+# Debian packaging build artifacts
+debian/.debhelper/
+debian/files
+debian/debhelper-build-stamp
+debian/*.substvars
+debian/jellyfin-web-cix/
+/web/
