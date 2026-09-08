@@ -23,6 +23,12 @@ import { type ActionFunctionArgs, Form, useActionData, useNavigation, useSubmit 
 import { QUERY_KEY, useNamedConfiguration } from 'hooks/useNamedConfiguration';
 import type { EncodingOptions } from '@jellyfin/sdk/lib/generated-client/models/encoding-options';
 import { HardwareAccelerationType } from '@jellyfin/sdk/lib/generated-client/models/hardware-acceleration-type';
+
+// Extended EncodingOptions with V4L2M2M-specific properties not yet in SDK
+interface EncodingOptionsExtended extends EncodingOptions {
+    V4l2m2mDevice?: string;
+    EnableDecodingColorDepth10Av1?: boolean;
+}
 import { ServerConnections } from 'lib/jellyfin-apiclient';
 import { getSystemApi } from '@jellyfin/sdk/lib/utils/api/system-api';
 import { queryClient } from 'utils/query/queryClient';
@@ -51,8 +57,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export const Component = () => {
-    const { data: initialConfig, isPending, isError } = useNamedConfiguration<EncodingOptions>(CONFIG_KEY);
-    const [ config, setConfig ] = useState<EncodingOptions | null>(null);
+    const { data: initialConfig, isPending, isError } = useNamedConfiguration<EncodingOptionsExtended>(CONFIG_KEY);
+    const [ config, setConfig ] = useState<EncodingOptionsExtended | null>(null);
     const navigation = useNavigation();
     const actionData = useActionData() as ActionData | undefined;
     const submit = useSubmit();
@@ -149,7 +155,7 @@ export const Component = () => {
     }, [ config ]);
 
     const hardwareAccelType = config?.HardwareAccelerationType || HardwareAccelerationType.None;
-    const isHwaSelected = [ 'amf', 'nvenc', 'qsv', 'vaapi', 'rkmpp', 'videotoolbox' ].includes(hardwareAccelType);
+    const isHwaSelected = [ 'amf', 'nvenc', 'qsv', 'vaapi', 'rkmpp', 'videotoolbox', 'v4l2m2m' ].includes(hardwareAccelType);
 
     const availableCodecs = useMemo(() => (
         CODECS.filter(codec => codec.types.includes(hardwareAccelType))
@@ -225,6 +231,16 @@ export const Component = () => {
                                 />
                             )}
 
+                            {hardwareAccelType === 'v4l2m2m' && (
+                                <TextField
+                                    name='V4l2m2mDevice'
+                                    label={globalize.translate('LabelV4l2m2mDevice')}
+                                    value={config.V4l2m2mDevice}
+                                    onChange={onConfigChange}
+                                    helperText={globalize.translate('LabelV4l2m2mDeviceHelp')}
+                                />
+                            )}
+
                             {hardwareAccelType !== 'none' && (
                                 <>
                                     <Typography variant='h3'>{globalize.translate('LabelEnableHardwareDecodingFor')}</Typography>
@@ -263,6 +279,19 @@ export const Component = () => {
                                                     <Checkbox
                                                         name={'EnableDecodingColorDepth10Vp9'}
                                                         checked={config.EnableDecodingColorDepth10Vp9}
+                                                        onChange={onCheckboxChange}
+                                                    />
+                                                }
+                                            />
+                                        )}
+
+                                        {HEVC_VP9_HW_DECODING_TYPES.includes(hardwareAccelType) && (
+                                            <FormControlLabel
+                                                label={'AV1 10bit'}
+                                                control={
+                                                    <Checkbox
+                                                        name={'EnableDecodingColorDepth10Av1'}
+                                                        checked={config.EnableDecodingColorDepth10Av1}
                                                         onChange={onCheckboxChange}
                                                     />
                                                 }
