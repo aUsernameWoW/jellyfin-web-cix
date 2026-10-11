@@ -28,6 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.version.outputs.version }}
+      upstream: ${{ steps.version.outputs.upstream }}
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -47,6 +48,7 @@ jobs:
             VERSION="${BASE}-cix1~git$(date -u +%Y%m%d).${GITHUB_SHA::7}"
           fi
           echo "version=$VERSION" | tee -a "$GITHUB_OUTPUT"
+          echo "upstream=$(tr -d '[:space:]' < .github/upstream-base)" | tee -a "$GITHUB_OUTPUT"
 
       - name: Setup Node.js
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
@@ -106,16 +108,25 @@ jobs:
           body: |
             ## Jellyfin Web CIX
 
-            Jellyfin web client with V4L2M2M (CIX SoC) transcoding settings.
-            Built from this repository at `${{ github.sha }}`.
+            Jellyfin web client with V4L2M2M (CIX SoC) transcoding settings. Install it together with the matching server package.
+
+            - Based on upstream jellyfin-web [${{ needs.build.outputs.upstream }}](https://github.com/jellyfin/jellyfin-web/releases/tag/${{ needs.build.outputs.upstream }})
+            - Built from commit [`${{ github.sha }}`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
+
+            ### Downloads
+            | Package | Where to get it |
+            | --- | --- |
+            | `jellyfin-web-cix` | Attached to this release (below) |
+            | `jellyfin-server-cix` (same version) | [jellyfin-server-cix releases](https://github.com/aUsernameWoW/jellyfin-server-cix/releases) |
+            | `cix-ffmpeg` + `cix-libav*` (FFmpeg for CIX, used by the server) | [radxa-pkg/cix-prebuilt releases](https://github.com/radxa-pkg/cix-prebuilt/releases) |
 
             ### Installation
             ```bash
-            sudo dpkg -i jellyfin-web-cix_*.deb
+            sudo apt install ./jellyfin-server-cix_*.deb ./jellyfin-web-cix_*.deb
             ```
 
-            ### Related Packages
-            - `jellyfin-server-cix` - matching server with V4L2M2M hardware acceleration
+            FFmpeg setup and the remaining steps are in the
+            [jellyfin-server-cix release notes](https://github.com/aUsernameWoW/jellyfin-server-cix/releases).
           files: artifacts/*.deb
           draft: false
           prerelease: false
