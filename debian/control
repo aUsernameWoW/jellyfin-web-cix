@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Jellyfin CIX Packaging Team
 Build-Depends: debhelper (>= 9)
 Standards-Version: 3.9.4
-Homepage: https://github.com/radxa-pkg/cix-prebuilt
+Homepage: https://github.com/aUsernameWoW/jellyfin-web-cix
 
 Package: jellyfin-web-cix
 Architecture: all
